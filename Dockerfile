@@ -12,16 +12,24 @@ RUN echo "Europe/Berlin" > /etc/timezone && dpkg-reconfigure -f noninteractive t
 RUN apt-get update -y && \
   apt-get install -y --no-install-recommends \
   less vim wget unzip rsync git mysql-client postfix autossh \
-  libcurl4-openssl-dev libfreetype6 libjpeg62-turbo libpng-dev libjpeg-dev libxml2-dev libwebp6 libxpm4 libc-client-dev libkrb5-dev && \
+  libcurl4-openssl-dev libfreetype6 libjpeg62-turbo libpng-dev libjpeg-dev libxml2-dev libwebp-dev libxpm-dev libc-client-dev libkrb5-dev libfreetype6-dev && \
   apt-get clean && \
   apt-get autoremove -y && \
   rm -rf /var/lib/apt/lists/* && \
   echo "export TERM=xterm" >> /root/.bashrc
 
 # install php extensions
-RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/local/ && \
+RUN docker-php-ext-configure gd \
+  --with-gd \
+  --with-webp-dir \
+  --with-jpeg-dir \
+  --with-png-dir \
+  --with-zlib-dir \
+  --with-xpm-dir \
+  --with-freetype-dir \
+  --enable-gd-native-ttf && \
   docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
-  docker-php-ext-install -j$(nproc) curl json xml mbstring zip bcmath soap pdo_mysql mysqli gd gettext imap opcache freetype intl
+  docker-php-ext-install -j$(nproc) curl json xml mbstring zip bcmath soap pdo_mysql mysqli gd gettext imap opcache intl
 
 # install ioncube    
 RUN curl -o ioncube.tar.gz http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
