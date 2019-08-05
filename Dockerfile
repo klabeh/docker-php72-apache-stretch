@@ -14,7 +14,7 @@ RUN apt-get update -y && \
   less vim wget unzip rsync git mysql-client postfix autossh \
   libcurl4-openssl-dev libfreetype6 libjpeg62-turbo libpng-dev \
   libjpeg-dev libxml2-dev libwebp-dev libxpm-dev libc-client-dev \
-  libkrb5-dev libfreetype6-dev optipng pngcrush && \
+  libkrb5-dev libfreetype6-dev jpegoptim optipng pngcrush && \
   apt-get clean && \
   apt-get autoremove -y && \
   rm -rf /var/lib/apt/lists/* && \
