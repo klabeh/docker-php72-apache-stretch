@@ -12,7 +12,9 @@ RUN echo "Europe/Berlin" > /etc/timezone && dpkg-reconfigure -f noninteractive t
 RUN apt-get update -y && \
   apt-get install -y --no-install-recommends \
   less vim wget unzip rsync git mysql-client postfix autossh \
-  libcurl4-openssl-dev libfreetype6 libjpeg62-turbo libpng-dev libjpeg-dev libxml2-dev libwebp-dev libxpm-dev libc-client-dev libkrb5-dev libfreetype6-dev && \
+  libcurl4-openssl-dev libfreetype6 libjpeg62-turbo libpng-dev \
+  libjpeg-dev libxml2-dev libwebp-dev libxpm-dev libc-client-dev \
+  libkrb5-dev libfreetype6-dev optipng pngcrush && \
   apt-get clean && \
   apt-get autoremove -y && \
   rm -rf /var/lib/apt/lists/* && \
@@ -26,8 +28,7 @@ RUN docker-php-ext-configure gd \
   --with-png-dir \
   --with-zlib-dir \
   --with-xpm-dir \
-  --with-freetype-dir \
-  --enable-gd-native-ttf && \
+  --with-freetype-dir && \
   docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
   docker-php-ext-install -j$(nproc) curl json xml mbstring zip bcmath soap pdo_mysql mysqli gd gettext imap opcache intl
 
@@ -49,7 +50,8 @@ RUN rm mod-pagespeed-*.deb
 RUN sed -i -e 's/ModPagespeed on/ModPagespeed off/g' /etc/apache2/mods-available/pagespeed.conf
 
 # apache stuff
-RUN /usr/sbin/a2enmod rewrite && /usr/sbin/a2enmod headers && /usr/sbin/a2enmod expires && /usr/sbin/a2enmod pagespeed
+RUN /usr/sbin/a2enmod rewrite && /usr/sbin/a2enmod headers && /usr/sbin/a2enmod expires
+RUN /usr/sbin/a2enmod pagespeed && /usr/sbina2enmod http2
 COPY ./files/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 WORKDIR /var/www/html
