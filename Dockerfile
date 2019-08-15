@@ -57,3 +57,6 @@ COPY ./files/000-default.conf /etc/apache2/sites-available/000-default.conf
 WORKDIR /var/www/html
 
 CMD ["apache2-foreground"]
+
+HEALTHCHECK --interval=15m --timeout=30s --retries=3 \
+    CMD curl -f http://localhost/ || exit 1
