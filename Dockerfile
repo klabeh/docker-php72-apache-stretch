@@ -1,4 +1,4 @@
-FROM php:7.2-apache-stretch
+FROM php:7.3-apache-stretch
 
 MAINTAINER klabehgge@gmail.com
 
@@ -48,17 +48,6 @@ RUN wget https://dl-ssl.google.com/dl/linux/direct/mod-pagespeed-stable_current_
 RUN dpkg -i mod-pagespeed-*.deb
 RUN rm mod-pagespeed-*.deb
 RUN sed -i -e 's/ModPagespeed on/ModPagespeed off/g' /etc/apache2/mods-available/pagespeed.conf
-
-# install mod_brotli
-RUN apt-get install brotli
-RUN git clone --depth=1 --recursive https://github.com/kjdev/apache-mod-brotli.git
-RUN cd apache-mod-brotli
-RUN ./autogen.sh
-RUN ./configure
-RUN make
-RUN install -D .libs/mod_brotli.so /usr/lib/apache2/modules/mod_brotli.so -m 644
-RUN cd /etc/apache2/mods-available
-RUN echo "LoadModule brotli_module /usr/lib/apache2/modules/mod_brotli.so" > brotli.load
 
 # apache stuff
 RUN /usr/sbin/a2enmod rewrite && /usr/sbin/a2enmod headers && /usr/sbin/a2enmod expires
