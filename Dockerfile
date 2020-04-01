@@ -1,4 +1,4 @@
-FROM php:7.3-apache-stretch
+FROM php:7.2-apache-stretch
 
 MAINTAINER klabehgge@gmail.com
 
@@ -51,7 +51,7 @@ RUN sed -i -e 's/ModPagespeed on/ModPagespeed off/g' /etc/apache2/mods-available
 
 # apache stuff
 RUN /usr/sbin/a2enmod rewrite && /usr/sbin/a2enmod headers && /usr/sbin/a2enmod expires
-RUN /usr/sbin/a2enmod pagespeed && /usr/sbin/a2enmod http2 && a2enmod brotli
+RUN /usr/sbin/a2enmod pagespeed && /usr/sbin/a2enmod http2
 COPY ./files/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 WORKDIR /var/www/html
